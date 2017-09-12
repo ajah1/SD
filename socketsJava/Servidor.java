@@ -6,19 +6,25 @@
  	/*
  		leer datos socket
  	*/
- 	public String leerSocket()
+ 	public String leerSocket(Socket _sk, String _datos)
  	{
- 		String salida = "";
+ 		try
+ 		{
+ 			// obtener informacion
+ 			InputStream aux = _sk.getInputStream();
+ 			
+ 			DataInputStream flujo = new DataInputStream(aux);
+ 			
+ 			_datos = new String();
+ 			_datos = flujo.readUTF();
+ 		}
+ 		catch (Exception e)
+ 		{
+ 			System.out.println("ERROR: " + e.toString());
+ 		}
  		
- 		return salida;
+ 		return _datos;
  	}
- 
- 
-	/*
-		escribir en el socket
-	*/
-	public void escribirSocket()
-	{}
 	
 	public static void main(String[] arg)
 	{
@@ -57,8 +63,9 @@
 				while (mensaje != "fin")
 				{
 					// leer socket del cliente
+					mensaje = server.leerSocket(sc, mensaje);
 					
-					// esciribir socket del cliente
+					System.out.println("Mensaje recivido");
 				}
 				
 				// cerrar socket
