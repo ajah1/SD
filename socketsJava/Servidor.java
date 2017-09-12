@@ -29,7 +29,6 @@
 	public static void main(String[] arg)
 	{
 		int puerto = 0;
-		int resultado = 0;
 		
 		String mensaje = "";
 		
@@ -65,17 +64,19 @@
 					// leer socket del cliente
 					mensaje = server.leerSocket(sc, mensaje);
 					
-					System.out.println("Mensaje recivido");
+					System.out.println("Mensaje recibido");
 				}
 				
 				// cerrar socket
+				System.out.println("Cerrando servidor");
 				sc.close();
 				System.exit(0);
 			}
 		}
 		catch(Exception e)
 		{
-			System.out.println("ERROR: " + e.toString()); 
+			System.out.println("ERROR: " + e.toString());
+			System.exit(-1);
 		}
 	
 	}
