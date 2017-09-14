@@ -23,14 +23,14 @@
  	{
  		Cliente client = new Cliente();
  		
- 		String host;
  		int puerto;
+ 		
+ 		String host;
  		String mensaje = "";
  		
  		if (arg.length < 2)
  		{
  			System.out.println("ERROR: debe indicar la direccion del servidor y el puerto");
- 			
  			System.out.println("./Cliente servidor puerto");
  			
  			System.exit(-1);
@@ -38,18 +38,18 @@
  		
  		
  		host = arg[0];
- 		puerto = Integer.parseInt(arg[1])	;
+ 		puerto = Integer.parseInt(arg[1]);
  		
  		try{
  			Socket sc = new Socket(host, puerto);
  			
-	 		while (mensaje != "fin")
+	 		while (mensaje.equals("fin") != true)
 			{
 				InputStreamReader isr = new InputStreamReader(System.in);
 				BufferedReader br = new BufferedReader (isr);
 				
 				mensaje = br.readLine();
-				
+					
 				escribirSocket(sc, mensaje);
 			}
  		}

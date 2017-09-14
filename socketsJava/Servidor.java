@@ -50,21 +50,21 @@
 			ServerSocket ss = new ServerSocket(puerto);
 			System.out.println("Escucho el puerto");
 			
+			System.out.println("Activo hasta fin");
 			
 			// mantener conexion con el cliente
 			for(;;)
 			{
 				// se espera un cliente
 				Socket sc = ss.accept();
-				System.out.println("cliente acpetado");
+				System.out.println("cliente aceptado");
 				
 				// mantener conexión hasta condición
-				while (mensaje != "fin")
+				while (!mensaje.equals("fin"))
 				{
 					// leer socket del cliente
 					mensaje = server.leerSocket(sc, mensaje);
-					
-					System.out.println("Mensaje recibido");
+					System.out.println("Mensaje recibido: " + mensaje);
 				}
 				
 				// cerrar socket
