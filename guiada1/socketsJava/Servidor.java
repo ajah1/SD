@@ -52,7 +52,7 @@
 			
 			System.out.println("Activo hasta fin");
 			
-			// mantener conexion con el cliente
+			// aceptar conexiones hasta exit
 			for(;;)
 			{
 				// se espera un cliente
@@ -67,7 +67,7 @@
 					System.out.println("Mensaje recibido: " + mensaje);
 				}
 				
-				// cerrar socket
+				// finalizar conexion
 				System.out.println("Cerrando servidor");
 				sc.close();
 				System.exit(0);

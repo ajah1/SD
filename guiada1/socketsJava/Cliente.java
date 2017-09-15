@@ -43,7 +43,7 @@
  		try{
  			Socket sc = new Socket(host, puerto);
  			
-	 		while (mensaje.equals("fin") != true)
+	 		while (!mensaje.equals("fin"))
 			{
 				InputStreamReader isr = new InputStreamReader(System.in);
 				BufferedReader br = new BufferedReader (isr);
@@ -56,6 +56,7 @@
  		catch (Exception e)
  		{
  			System.out.println(e);
+			System.exit(-1);
  		}
  	}
  }
