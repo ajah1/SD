@@ -47,37 +47,77 @@ public class ServerHilo extends Thread{
 	}
 	
 	/*
-	 * Escribe en el socket del cliente,
-	 * los datos pasados por parámetro
-	 */
-	public void escribirCliente( Socket _sc, String _buffer )
-	{
-		try
-		{
-            OutputStream aux = _sc.getOutputStream();
-            DataOutputStream flujo = new DataOutputStream(aux);
-            
-            flujo.writeUTF( _buffer );
-            
-		}
-		catch ( Exception e )
-		{
-			System.out.print( "ERROR: al escribir en el cliente" );
-			System.out.println( e.toString() );
-		}
-	}
-	
-	/*
 	 * lee del string el fichero estático a devoler
 	 * si no lo encuentra muestra envia error 404
 	 */
 	public void enviarEstatico( String [] cadena )
 	{
-		if ( cadena.length == 0 || cadena[1].equals("index.html") )
+		
+		
+		try 
 		{
-			System.out.println("preparando http para index..");
+			PrintWriter salida;
+			salida = new PrintWriter( socketCliente.getOutputStream() );
 			
-			System.out.println("http enviado");
+			BufferedReader br;
+			
+			String datos = "";
+			String archivo = "./";
+			
+			if ( cadena.length == 0 || cadena[1].equals("index.html") )
+			{
+				System.out.println("preparando http para index..");
+					
+				archivo = archivo.concat("index.html");
+				
+				br = new BufferedReader( new FileReader( archivo ));
+				
+				salida.println("HTTP/1.1 200 OK");
+				salida.println("Content-Type: text/html; charset=utf-8");
+				salida.println("Server: MyHTTPServer");
+				
+				salida.println("");
+				
+				datos = br.readLine();
+				while ( datos != null )
+				{
+					salida.println( datos );
+					datos = br.readLine();
+				}
+				
+				salida.flush();
+				salida.close();
+				
+				System.out.println("http enviado");
+			}
+			else
+			{
+				archivo = archivo.concat("error.html");
+				
+				br = new BufferedReader( new FileReader( archivo ));
+				
+				salida.println("HTTP/1.1 404 Not Found");
+				salida.println("Content-Type: text/html; charset=utf-8");
+				salida.println("Server: MyHTTPServer");
+				
+				salida.println("");
+				
+				datos = br.readLine();
+				while ( datos != null )
+				{
+					salida.println( datos );
+					datos = br.readLine();
+				}
+				
+				salida.flush();
+				salida.close();
+			}
+			
+		} 
+		catch (IOException e) 
+		{
+			System.out.println("ERROR: al enviar estático");
+			e.printStackTrace();
 		}
 			
 	}
@@ -118,7 +158,6 @@ public class ServerHilo extends Thread{
 				
 				else
 					enviarDinamico( cadena );
-					
 			}
 		}
 	}
