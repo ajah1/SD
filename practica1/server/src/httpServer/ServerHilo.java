@@ -9,10 +9,15 @@ import java.util.logging.Logger;
 public class ServerHilo extends Thread{
 
 	private Socket socketCliente;
+	private Socket socketController;
+	private int puertoController;
+	private String hostController;
 	
-	public ServerHilo ( Socket _sc )
+	public ServerHilo ( Socket _sc, int _pc, String _hc )
 	{	
 		socketCliente = _sc;
+		puertoController = _pc;
+		hostController = _hc;
 		this.run();
 	}
 	
@@ -68,7 +73,7 @@ public class ServerHilo extends Thread{
 					
 				archivo = archivo.concat("index.html");
 				
-				br = new BufferedReader( new FileReader( archivo ));
+				br = new BufferedReader( new FileReader( archivo ) );
 				
 				salida.println("HTTP/1.1 200 OK");
 				salida.println("Content-Type: text/html; charset=utf-8");
@@ -123,6 +128,20 @@ public class ServerHilo extends Thread{
 	public void enviarDinamico( String [] cadena )
 	{
 		System.out.println("cosas dinámicas :O");
+		System.out.println("Contectando al socket del controller...");
+		try
+		{
+			// conectar con el socket del controller
+			this.socketController = new Socket(this.hostController, this.puertoController);
+		}
+		catch ( Exception e)
+		{
+			System.out.println("ERROR: conectando con el controller");
+			System.out.println(e.toString());
+		}
+		
+		System.out.println("Conectado");
+		
 	}
 	
 	
@@ -158,22 +177,6 @@ public class ServerHilo extends Thread{
 				}
 			}
 		}
-	}
-	/*
-	 * Cierra el cliente
-	 */
-	public void cerrarCliente()
-	{
-        try 
-        {
-            socketCliente.close();
-        }
-        catch (IOException e)
-        {
-            //Logger.getLogger(ServerHilo.class.getName()).log(Level.SEVERE, null, ex1);
-            System.out.println( "ERROR: cerra socketCliente en ServerHilo" );
-            System.out.println( e.toString() );
-        }
 	}
 	
 	/*

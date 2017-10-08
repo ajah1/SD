@@ -7,12 +7,12 @@ public class Server {
 
 	
 	// Abrir socket
-	public void abrirServer( int _puerto, int _cc )
+	public void abrirServer( int _ps, int _cc, int _pc, String _hc )
 	{
 		try
 		{
-			ServerSocket ss = new ServerSocket( _puerto );
-			System.out.println( "Escucho el puerto " + _puerto );
+			ServerSocket ss = new ServerSocket( _ps );
+			System.out.println( "Escucho el puerto " + _ps );
 	
 			for(;;)
 			{
@@ -22,7 +22,7 @@ public class Server {
 					Socket sc = ss.accept();
 					System.out.println( "Cliente(" + (_cc + 1) +  ") aceptado" );
 	
-			        Thread t = new ServerHilo( sc );
+			        Thread t = new ServerHilo( sc, _pc, _hc );
 			        t.start();
 			        
 			        System.out.println( "Cliente(" + (_cc + 1) +  ") cerrado" + "\n");
@@ -44,21 +44,30 @@ public class Server {
 		
 		Server sv= new Server();
 
-		int puerto = 8080;
+		int ps = 8080;
+		int pc = 8090;
 		int concurrencias = 5;
+		
+		String hostController = "localhost";
 
 		Scanner sc = new Scanner( System.in );
 		
 		System.out.println( "*** Asistente minihttpserver ***" + "\n" );
 		
-		System.out.print( "Puerto [pd 8080]: " );
-		puerto = sc.nextInt();
+		System.out.print( "Puerto server http [pd 8080]: " );
+		ps = sc.nextInt();
 		
 		System.out.print( "Concurrencias [pd 5]: " );
 		concurrencias = sc.nextInt();
 		
+		System.out.println("Puerto controller [pd 8090]: ");
+		pc = sc.nextInt();
+		
+		System.out.println("Host del controller [pd localhost] :");
+		hostController = sc.nextLine();
+		
 		System.out.println( "\n" + "Abriendo server..." );
-		sv.abrirServer( puerto, concurrencias );
+		sv.abrirServer( ps, concurrencias, pc, hostController );
 		
 		
 	}
