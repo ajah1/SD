@@ -7,6 +7,7 @@ public class Server {
 
 	
 	// Abrir socket
+	@SuppressWarnings("deprecation")
 	public void abrirServer( int _puerto, int _cc )
 	{
 		try
@@ -26,6 +27,7 @@ public class Server {
 			        t.start();
 			        System.out.println( "Cliente(" + (_cc + 1) +  ") cerrado" );
 			        _cc++;
+			        t.stop();
 				}
 				else
 					System.out.println( "Cliente rechazado :O" );

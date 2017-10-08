@@ -52,8 +52,6 @@ public class ServerHilo extends Thread{
 	 */
 	public void enviarEstatico( String [] cadena )
 	{
-		
-		
 		try 
 		{
 			PrintWriter salida;
@@ -66,7 +64,7 @@ public class ServerHilo extends Thread{
 			
 			if ( cadena.length == 0 || cadena[1].equals("index.html") )
 			{
-				System.out.println("preparando http para index..");
+				//System.out.println("preparando http para index..");
 					
 				archivo = archivo.concat("index.html");
 				
@@ -86,9 +84,9 @@ public class ServerHilo extends Thread{
 				}
 				
 				salida.flush();
-				salida.close();
+				//salida.close();
 				
-				System.out.println("http enviado");
+				//System.out.println("http enviado");
 			}
 			else
 			{
@@ -110,7 +108,7 @@ public class ServerHilo extends Thread{
 				}
 				
 				salida.flush();
-				salida.close();
+				//salida.close();
 			}
 			
 		} 
@@ -141,12 +139,12 @@ public class ServerHilo extends Thread{
 
 			// guardamos tipo de comando
 			aux1 = s.nextToken().toString();
-			System.out.println("COMANDO: " + aux1 );
+			//System.out.println("COMANDO: " + aux1 );
 			
 			if ( aux1.equals("GET") )
 			{
 				aux1 = s.nextToken().toString();
-				System.out.println("URL: " + aux1);
+				//System.out.println("URL: " + aux1);
 				
 				String [] cadena = aux1.split("/");
 
@@ -189,7 +187,7 @@ public class ServerHilo extends Thread{
 		
 		this.procesarPeticion();
 		
-		//this.cerrarCliente();
+		this.cerrarCliente();
 
 	}
 	
