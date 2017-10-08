@@ -7,7 +7,6 @@ public class Server {
 
 	
 	// Abrir socket
-	@SuppressWarnings("deprecation")
 	public void abrirServer( int _puerto, int _cc )
 	{
 		try
@@ -21,13 +20,14 @@ public class Server {
 				{
 					_cc--;
 					Socket sc = ss.accept();
-			        System.out.println( "Cliente(" + (_cc + 1) +  ") aceptado" );
+					System.out.println( "Cliente(" + (_cc + 1) +  ") aceptado" );
 	
 			        Thread t = new ServerHilo( sc );
 			        t.start();
-			        System.out.println( "Cliente(" + (_cc + 1) +  ") cerrado" );
+			        
+			        System.out.println( "Cliente(" + (_cc + 1) +  ") cerrado" + "\n");
+			        
 			        _cc++;
-			        t.stop();
 				}
 				else
 					System.out.println( "Cliente rechazado :O" );

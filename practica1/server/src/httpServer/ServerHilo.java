@@ -148,14 +148,14 @@ public class ServerHilo extends Thread{
 				
 				String [] cadena = aux1.split("/");
 
-				if ( cadena.length == 0 )
+				if ( cadena.length == 0 || !cadena[1].equals("controladorSD") )
 					enviarEstatico( cadena );
-				
-				else if ( !cadena[1].equals("controladorSD") )
-					enviarEstatico( cadena );
-				
+
 				else
+				{
+					System.out.println("ENTRAR EN DINAMICO");
 					enviarDinamico( cadena );
+				}
 			}
 		}
 	}
@@ -168,9 +168,11 @@ public class ServerHilo extends Thread{
         {
             socketCliente.close();
         }
-        catch (IOException ex1)
+        catch (IOException e)
         {
-            Logger.getLogger(ServerHilo.class.getName()).log(Level.SEVERE, null, ex1);
+            //Logger.getLogger(ServerHilo.class.getName()).log(Level.SEVERE, null, ex1);
+            System.out.println( "ERROR: cerra socketCliente en ServerHilo" );
+            System.out.println( e.toString() );
         }
 	}
 	
@@ -187,8 +189,7 @@ public class ServerHilo extends Thread{
 		
 		this.procesarPeticion();
 		
-		this.cerrarCliente();
-
+		//this.cerrarCliente();	
 	}
 	
 }
