@@ -125,6 +125,17 @@ public class ServerHilo extends Thread{
 			
 	}
 	
+    
+   public void escribeSocket(Socket sk, String datos) {
+       try {
+           OutputStream aux = sk.getOutputStream();
+           DataOutputStream flujo = new DataOutputStream(aux);
+           flujo.writeUTF(datos);
+       } catch (Exception e) {
+           System.out.println("No se ha podido conectar con el controlador: " + e.toString());
+       }
+   }
+	
 	public void enviarDinamico( String [] cadena )
 	{
 		System.out.println("cosas dinámicas :O");
@@ -133,6 +144,8 @@ public class ServerHilo extends Thread{
 		{
 			// conectar con el socket del controller
 			this.socketController = new Socket(this.hostController, this.puertoController);
+			String datos = "invernadero=1@sonda=1";
+			this.escribeSocket(socketCliente, datos);
 		}
 		catch ( Exception e)
 		{

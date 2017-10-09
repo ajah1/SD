@@ -70,8 +70,8 @@ public class Controller {
     {
     	try 
     	{
-			ServerSocket ss = new ServerSocket(this.porhttp);
-			System.out.println("Escucho a http server");
+			ServerSocket ss = new ServerSocket(this.portrmi);
+			System.out.println("Abrir server rmi, escuchando");
 			
 			for (;;)
 			{
@@ -81,8 +81,8 @@ public class Controller {
 				this.peticion = this.leeSocket(sc, peticion);
 				System.out.println("PETICION: "+ this.peticion);
 				
-				this.procesarPeticion();
-				
+				//this.procesarPeticion();
+			
 			}
 		} 
     	catch (IOException e) 
@@ -94,6 +94,15 @@ public class Controller {
     
     public static void main(String[] args) 
     {
+    	
+    	Controller c= new Controller();
+		
+		c.hosthttp = "localhost";
+		c.porhttp = 8080;
+		c.portrmi = 8090;
+		
+		c.abrirServer();
+    	
     	if ( args.length < 3)
     	{
     		System.out.println("Error argumentos incorrectos");
@@ -101,11 +110,11 @@ public class Controller {
     	}
     	else 
     	{
-    		Controller c= new Controller();
+    		Controller co = new Controller();
     		
-    		c.hosthttp = args[1];
-    		c.porhttp = Integer.parseInt(args[2]);
-    		c.portrmi = Integer.parseInt(args[3]);
+    		c.hosthttp = args[0];
+    		c.porhttp = Integer.parseInt(args[1]);
+    		c.portrmi = Integer.parseInt(args[2]);
     		
     		c.abrirServer();
     	}
