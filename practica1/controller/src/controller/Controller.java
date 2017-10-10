@@ -75,12 +75,17 @@ public class Controller {
 			
 			for (;;)
 			{
+				
 				Socket sc = ss.accept();
-				System.out.println("Aceptando clientehttp");
+				System.out.println("Aceptado clientehttp");
 				
 				this.peticion = this.leeSocket(sc, peticion);
+				
 				System.out.println("PETICION: "+ this.peticion);
 				
+				System.out.println("cerrando petición atendida :O");
+				
+				sc.close();
 				//this.procesarPeticion();
 			
 			}
@@ -118,10 +123,7 @@ public class Controller {
     		
     		c.abrirServer();
     	}
-    	
-    	
     }
-	
 }
 
 

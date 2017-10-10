@@ -12,6 +12,7 @@ public class ServerHilo extends Thread{
 	private Socket socketController;
 	private int puertoController;
 	private String hostController;
+	private String comando;
 	
 	public ServerHilo ( Socket _sc, int _pc, String _hc )
 	{	
@@ -126,12 +127,16 @@ public class ServerHilo extends Thread{
 	}
 	
     
-   public void escribeSocket(Socket sk, String datos) {
-       try {
+   public void escribeSocket(Socket sk, String datos) 
+   {
+       try 
+       {
            OutputStream aux = sk.getOutputStream();
            DataOutputStream flujo = new DataOutputStream(aux);
            flujo.writeUTF(datos);
-       } catch (Exception e) {
+       } 
+       catch (Exception e) 
+       {
            System.out.println("No se ha podido conectar con el controlador: " + e.toString());
        }
    }
@@ -144,8 +149,13 @@ public class ServerHilo extends Thread{
 		{
 			// conectar con el socket del controller
 			this.socketController = new Socket(this.hostController, this.puertoController);
+			
 			String datos = "invernadero=1@sonda=1";
-			this.escribeSocket(socketCliente, datos);
+			this.escribeSocket(socketController, this.comando);
+			
+			System.out.println("Peticion escrita en socket del controller");
+			this.socketController.close();
+			
 		}
 		catch ( Exception e)
 		{
@@ -176,6 +186,7 @@ public class ServerHilo extends Thread{
 			if ( aux1.equals("GET") )
 			{
 				aux1 = s.nextToken().toString();
+				this.comando = aux1;
 				//System.out.println("URL: " + aux1);
 				
 				String [] cadena = aux1.split("/");
@@ -197,15 +208,7 @@ public class ServerHilo extends Thread{
 	 */
 	public void run()
 	{
-		/*
-		String tramaHttp = "";
-		tramaHttp = this.leerSocket(socketCliente, tramaHttp);	
-		System.out.println( tramaHttp );
-		*/
-		
 		this.procesarPeticion();
-		
-		//this.cerrarCliente();	
 	}
 	
 }

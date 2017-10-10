@@ -60,7 +60,7 @@ public class Server {
 		System.out.print( "Concurrencias [pd 5]: " );
 		concurrencias = sc.nextInt();
 		
-		System.out.println("Puerto controller [pd 8090]: ");
+		System.out.print("Puerto controller [pd 8090]: ");
 		pc = sc.nextInt();
 		
 		System.out.println("Host del controller [pd localhost] :");
