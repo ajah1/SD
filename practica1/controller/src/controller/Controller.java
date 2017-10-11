@@ -86,7 +86,7 @@ public class Controller {
 				System.out.println("cerrando petición atendida :O");
 				
 				sc.close();
-				//this.procesarPeticion();
+				this.procesarPeticion();
 			
 			}
 		} 
