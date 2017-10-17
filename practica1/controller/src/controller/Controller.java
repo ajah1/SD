@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.*;
+import java.util.StringTokenizer;
 
 public class Controller {
 	
 	private String hosthttp;
 	private int portrmi;
 	private int porhttp;
+	private String url;
 	private String peticion;
 	/*
 	 * Lee los datos escritos en el socket del controller
@@ -54,12 +56,17 @@ public class Controller {
         return;
     }
 	
-    /*
-     * 	dependiendo del tipo de petición se enviará una páquina
-     * distinta, con los datos correspodientes
+    /* MAQUINA DONDE ESTA EL RMIREGISTRY AÑADIR OBJETO REGISTRADOR
+     * 	detecta el tipo de comanod set/get
      */
     public void procesarPeticion()
     {
+    
+    	String [] datos = this.url.split("/");
+    	
+    	for ( String d : datos)
+    		System.out.println(d); 
+    	
     	
     }
     /*
@@ -79,9 +86,9 @@ public class Controller {
 				Socket sc = ss.accept();
 				System.out.println("Aceptado clientehttp");
 				
-				this.peticion = this.leeSocket(sc, peticion);
+				this.url = this.leeSocket(sc, url);
 				
-				System.out.println("PETICION: "+ this.peticion);
+				System.out.println("URL: "+ this.url);
 				
 				System.out.println("cerrando petición atendida :O");
 				
