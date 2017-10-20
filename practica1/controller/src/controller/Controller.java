@@ -67,7 +67,6 @@ public class Controller {
     	for ( String d : datos)
     		System.out.println(d); 
     	
-    	
     }
     /*
      * Abre el server del controlador a la espera de peticiones
