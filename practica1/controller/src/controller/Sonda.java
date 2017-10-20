@@ -32,10 +32,6 @@ public class Sonda implements Serializable, Interfaz
 		this._humedad = humedad;
 		this._temperatura = temperatura;
 		
-		// leemos la sonda añadida
-		// si no se puede leer lanzamos excepción
-		// en caso contrario leemos
-		
 	}
 
 	// FUNCION PARA LEER EL FICHERO QUE HACE DE SONDA
@@ -98,13 +94,13 @@ public class Sonda implements Serializable, Interfaz
 	// FUNCION PARA AÑADIR UNA NUEVA SONDA (FICHERO)
 	// CON LOS PARAMETROS AÑADIDOS AL CREAR EL OBJETO
 	@Override
-	public void crearSonda()
+	public void crearSonda(String nombre)
 	{
 		try 
 		{
-			File file = new File( "sonda" + this._id );
+			File file = new File( nombre);
 			
-			BufferedWriter bw = new BufferedWriter(new FileWriter("sonda" + this._id));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(nombre));
 			
 			String texto = "ID="+_id+"\n"+
 							"Tipo="+_tipo+"\n"+
@@ -159,12 +155,12 @@ public class Sonda implements Serializable, Interfaz
 	public static void main (String args[]) throws Exception
 	{
 		try {
-			Sonda sonda= new Sonda(1,"temperatura", 23, 50, "12/12/12");
+			Sonda sonda= new Sonda(2,"humedad", 99, 99, "99/99/99");
 			
-			//sonda.crearSonda();
+			sonda.crearSonda("sonda2");
 			System.out.println("sonda creada");
 			
-			sonda.leerFichero("sonda1");
+			sonda.leerFichero("sonda2");
 			
 			System.out.println("Sonda leida");
 			

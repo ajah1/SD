@@ -9,7 +9,7 @@ public interface Interfaz {
 	public void setTipo( String tipo );
 	public void setFecha( String fecha);
 	
-	public void crearSonda();
+	public void crearSonda(String nombre);
 	
 
 }
