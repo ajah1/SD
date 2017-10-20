@@ -45,36 +45,48 @@ public class Sonda implements Serializable, Interfaz
 		
 		try
 		{
+			System.out.println("ENTRAR LEER");
 			// leer archivo y guardarlo en objeto tipo bufferReader
 			File archivo = new File( nombre );
+			System.out.println("ABIERTO");
 			
 			FileReader file = new FileReader( archivo );
+			System.out.println("LEIDO");
 			
 			BufferedReader br = new BufferedReader( file );
+			System.out.println("GUARDADO");
 			
 			// mientras queden lineas en el buffer
 			String linea = br.readLine();
 			
-			while ( !linea.isEmpty() )
+			while ( linea != null )
 			{
 				//obtenemos los valores de cada parámetro
 				String aux[] = linea.split("=");
+				System.out.print(aux[0]);
+				System.out.println(aux[1]);
 				
-				if ( linea.contains("id") )
+				if ( linea.contains("ID") )
 					setid( Integer.parseInt(aux[1]) );
 				
-				else if ( linea.contains("tipo") )
+				else if ( linea.contains("Tipo") )
 					setTipo( aux[1] );
 				
-				else if ( linea.contains("temperatura") )
-					setTemp( Integer.parseInt(aux[1]) );
+				else if ( linea.contains("Fecha") )
+					setFecha( aux[1] );
 				
-				else if ( linea.contains("humedad") )
+				else if ( linea.contains("Temperatura") )
+					setTemp( Integer.parseInt(aux[1]) );
+
+				else if ( linea.contains("Humedad") )
 					setHumedad( Integer.parseInt(aux[1]) );
 				
-				br.close();
-				file.close();
+				linea = br.readLine();
+			
 			}
+			
+			br.close();
+			file.close();
 		}
 		catch( Exception e)
 		{
@@ -137,14 +149,32 @@ public class Sonda implements Serializable, Interfaz
 		// TODO Auto-generated method stub
 		this._tipo = tipo;
 	}
+
+	@Override
+	public void setFecha(String fecha) {
+		// TODO Auto-generated method stub
+		this._fecha = fecha;
+	}
 	
-	public static void main (String args[])
+	public static void main (String args[]) throws Exception
 	{
 		try {
 			Sonda sonda= new Sonda(1,"temperatura", 23, 50, "12/12/12");
 			
-			sonda.crearSonda();
+			//sonda.crearSonda();
 			System.out.println("sonda creada");
+			
+			sonda.leerFichero("sonda1");
+			
+			System.out.println("Sonda leida");
+			
+			/*
+			System.out.println(sonda._fecha);
+			System.out.println(sonda._humedad);
+			System.out.println(sonda._id);
+			System.out.println(sonda._temperatura);
+			System.out.println(sonda._tipo);
+			*/
 			
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
@@ -152,6 +182,7 @@ public class Sonda implements Serializable, Interfaz
 		}
 		
 	}
+
 }
 
 

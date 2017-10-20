@@ -7,6 +7,7 @@ public interface Interfaz {
 	public void setTemp( int temp );
 	public void setHumedad( int humedad );
 	public void setTipo( String tipo );
+	public void setFecha( String fecha);
 	
 	public void crearSonda();
 	
