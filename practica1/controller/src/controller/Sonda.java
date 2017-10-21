@@ -1,21 +1,28 @@
 package controller;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Serializable;
-import java.rmi.*;
+import java.io.*;
 
-public class Sonda implements Serializable, Interfaz
+import java.rmi.*;
+import java.rmi.server.*;
+
+// IMPLEMENTACIÓN DE LA INTERFAZ
+// ESTE OBJETO REPRESENTA CADA UNA DE LAS
+// SONDAS A CREAR.
+
+@SuppressWarnings("serial")
+public class Sonda extends UnicastRemoteObject
+				implements Serializable, Interfaz
 {
-	private int _id;
-	private String _tipo;
-	private int _humedad;
-	private int _temperatura;
-	private String _fecha;
+	private int _id = 0;
+	private String _tipo = "humedad";
+	private int _humedad = 0;
+	private int _temperatura = 0;
+	private String _fecha = "nofecha";
+	
+	public Sonda() throws RemoteException
+	{
+		super();
+	}
 	
 	// INICIALIZAR LA SONDA CON EL ID PASADO 
 	public Sonda( int id, 
@@ -42,7 +49,7 @@ public class Sonda implements Serializable, Interfaz
 		try
 		{
 			System.out.println("ENTRAR LEER");
-			// leer archivo y guardarlo en objeto tipo bufferReader
+			
 			File archivo = new File( nombre );
 			System.out.println("ABIERTO");
 			
@@ -52,12 +59,13 @@ public class Sonda implements Serializable, Interfaz
 			BufferedReader br = new BufferedReader( file );
 			System.out.println("GUARDADO");
 			
-			// mientras queden lineas en el buffer
-			String linea = br.readLine();
 			
+			String linea = br.readLine();
+			// MIENTRAS QUEDEN LINEAS POR LEER...
 			while ( linea != null )
 			{
-				//obtenemos los valores de cada parámetro
+				// OBTENER LOS VALORES DE LA SONDA
+				// EN FUNCIÓN DEL TIPO DE SONDA
 				String aux[] = linea.split("=");
 				System.out.print(aux[0]);
 				System.out.println(aux[1]);
@@ -122,36 +130,43 @@ public class Sonda implements Serializable, Interfaz
 		
 	}
 	
+	// SETTERS PARA MODIFICAR SOLO LOS VALORES
+	// DEL FICHERO QUE REPRESENTA LA SONDA
 	@Override
 	public void setid(int id) {
 		// TODO Auto-generated method stub
 		this._id = id;
+		crearSonda("sonda"+_id);
 	}
 
 	@Override
 	public void setTemp(int temp) {
 		// TODO Auto-generated method stub
 		this._temperatura = temp;
+		crearSonda("sonda"+_id);
 	}
 
 	@Override
 	public void setHumedad(int humedad) {
 		// TODO Auto-generated method stub
 		this._humedad = humedad;
+		crearSonda("sonda"+_id);
 	}
 
 	@Override
 	public void setTipo(String tipo) {
 		// TODO Auto-generated method stub
 		this._tipo = tipo;
+		crearSonda("sonda"+_id);
 	}
 
 	@Override
 	public void setFecha(String fecha) {
 		// TODO Auto-generated method stub
 		this._fecha = fecha;
+		crearSonda("sonda"+_id);
 	}
-	
+	/*
 	public static void main (String args[]) throws Exception
 	{
 		try {
@@ -163,21 +178,14 @@ public class Sonda implements Serializable, Interfaz
 			sonda.leerFichero("sonda2");
 			
 			System.out.println("Sonda leida");
-			
-			/*
-			System.out.println(sonda._fecha);
-			System.out.println(sonda._humedad);
-			System.out.println(sonda._id);
-			System.out.println(sonda._temperatura);
-			System.out.println(sonda._tipo);
-			*/
-			
+
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 	}
+	*/
 
 }
 

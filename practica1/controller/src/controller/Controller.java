@@ -5,8 +5,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.*;
+import java.rmi.Naming;
+import java.rmi.RMISecurityManager;
 import java.util.StringTokenizer;
 
+
+// GENERA EL CONTENIDO DINÁMICO, 
+// LEE LOS VALORES DE LAS SONDAS
 public class Controller {
 	
 	private String hosthttp;
@@ -14,9 +19,9 @@ public class Controller {
 	private int porhttp;
 	private String url;
 	private String peticion;
-	/*
-	 * Lee los datos escritos en el socket del controller
-	 */
+	
+	// LEE LOS DATOS ESCRITOS EN EL SOCKET ENTRE SERVER
+	// Y CONTROLADOR
 	public String leeSocket(Socket _ss, String _buffer) 
 	{
         try 
@@ -35,9 +40,7 @@ public class Controller {
         return _buffer;
     }
 	
-	/*
-	 * Escribe en el socket del cliente
-	 */
+	// ESCRIBE EN EL SOCKET ENTRE SERVER Y CONTROLADOR
     public void escribeSocket(Socket _ss, String _buffer) 
     {
         try 
@@ -56,22 +59,51 @@ public class Controller {
         return;
     }
 	
-    /* MAQUINA DONDE ESTA EL RMIREGISTRY AÑADIR OBJETO REGISTRADOR
-     * 	detecta el tipo de comanod set/get
-     */
-    public void procesarPeticion()
+    // LLAMA A LOS OBJETOS REMOTOS (SONDAS)
+    // PARA OBTENER LOS DATOS PEDIDOS
+	@SuppressWarnings("deprecation")
+	public void procesarPeticion()
     {
     
     	String [] datos = this.url.split("/");
     	
     	for ( String d : datos)
-    		System.out.println(d); 
+    		System.out.println(d);
     	
+    	System.out.println("preparando conexión rmi");
+    	// rmi://localhost:1099
+    	String host= "localhost";
+    	int port = 1099;
+    	String servidor = "rmi://" + host + ":" + port;
+        System.out.println("Servidor:" + servidor);
+        
+        String servidorConcreto = servidor.concat("/" + "sonda1");
+        System.out.println("Objeto:" + servidorConcreto);
+        
+        try
+        {
+        	 System.setSecurityManager(new RMISecurityManager());
+        	 
+        	 String names [];
+        	 
+        	 System.out.println("obtener nombres objetos remotos");
+        	 names = Naming.list(servidor);
+        	 
+        	 for ( String n : names)
+        	 {
+        		 System.out.println(n);
+        	 }
+        	 
+        }
+        catch( Exception e)
+        {
+        	System.out.println("ERROR. procesar peticion en controller");
+        	System.out.println(e.toString());
+        }
     }
-    /*
-     * Abre el server del controlador a la espera de peticiones
-     * del servidor http, cada petición es procesada
-     */
+    
+    // ABRE UN SOCKET A LA ESCUCHA DE PETICIONES
+    // DEL SERVER,
     public void abrirServer()
     {
     	try 

@@ -14,6 +14,8 @@ public class ServerHilo extends Thread{
 	private String hostController;
 	private String comando;
 	
+	// INICIALIZA LOS ATRIBUTOS DEL HILO E
+	// INICIA A PROCESAR LA TRAMA HTTP DESDE EL MÉTODO RUN()
 	public ServerHilo ( Socket _sc, int _pc, String _hc )
 	{	
 		socketCliente = _sc;
@@ -22,9 +24,8 @@ public class ServerHilo extends Thread{
 		this.run();
 	}
 	
-	/* 
-	 * Lee el socket escrito por el cliente
-	 */
+	// PARA LEER EL SOCKET, USADO PARA LEER LA TRAMA
+	// HTTP ENVIADA POR EL NAVEGADOR
 	public String leerSocket ( Socket _sc, String _buffer )
 	{
 		try
@@ -52,10 +53,10 @@ public class ServerHilo extends Thread{
 		return "";
 	}
 	
-	/*
-	 * lee del string el fichero estático a devoler
-	 * si no lo encuentra muestra envia error 404
-	 */
+
+	// GUARDA EN UN BUFFER EL ARCHIVO EL CONTENIDO
+	// ESTÁTICO CORRESPONDIENTE Y SE PREPARA PARA ESCRIBIRLO
+	// EN UNA PETICIÓN HTTP, SIENDO ESCRITA EN EL SOCKET
 	public void enviarEstatico( String [] cadena )
 	{
 		try 
@@ -68,6 +69,7 @@ public class ServerHilo extends Thread{
 			String datos = "";
 			String archivo = "./";
 			
+			// ENVIA LA PÁGINA PRINCIPAL DEL INVERNADERO
 			if ( cadena.length == 0 || cadena[1].equals("index.html") )
 			{
 				//System.out.println("preparando http para index..");
@@ -76,12 +78,14 @@ public class ServerHilo extends Thread{
 				
 				br = new BufferedReader( new FileReader( archivo ) );
 				
+				// CABECERA DE LA RESPUESTA HTTP
 				salida.println("HTTP/1.1 200 OK");
 				salida.println("Content-Type: text/html; charset=utf-8");
 				salida.println("Server: MyHTTPServer");
 				
 				salida.println("");
 				
+				// AÑADIMOS AL COTENIDO ESTÁTICO LA CABECERA HTTP
 				datos = br.readLine();
 				while ( datos != null )
 				{
@@ -94,18 +98,21 @@ public class ServerHilo extends Thread{
 				
 				//System.out.println("http enviado");
 			}
+			// PÁGINA DE ERROR EN CASO DE URL INCORRECTA
 			else
 			{
 				archivo = archivo.concat("error.html");
 				
 				br = new BufferedReader( new FileReader( archivo ));
 				
+				// CABECERA DE LA RESPUESTA HTTP
 				salida.println("HTTP/1.1 404 Not Found");
 				salida.println("Content-Type: text/html; charset=utf-8");
 				salida.println("Server: MyHTTPServer");
 				
 				salida.println("");
 				
+				// AÑADIMOS AL COTENIDO ESTÁTICO LA CABECERA HTTP
 				datos = br.readLine();
 				while ( datos != null )
 				{
@@ -126,7 +133,8 @@ public class ServerHilo extends Thread{
 			
 	}
 	
-    
+    // ESCRIBE EN EL SOCKET ENTRE SERVIDOR-CLIENTE
+	// LOS DATOS PASADOS POR PARÁMETRO
    public void escribeSocket(Socket sk, String datos) 
    {
        try 
@@ -141,8 +149,12 @@ public class ServerHilo extends Thread{
        }
    }
 	
-	public void enviarDinamico( String [] cadena )
-	{
+   // CUANDO EN LA URL SE PIDA VALORES DE LAS SONDAS
+   // DESDE ESTA FUNCIÓN LLAMAREMOS AL CONTROLADOR
+   // PARA QUE NOS DEVUELVA LA PÁGINA EN FUNCIÓN DE LOS
+   // DATOS PEDIDOS POR LA URL
+   public void enviarDinamico( String [] cadena )
+   {
 		System.out.println("cosas dinámicas :O");
 		System.out.println("Contectando al socket del controller...");
 		try
@@ -165,9 +177,11 @@ public class ServerHilo extends Thread{
 		
 		System.out.println("Conectado");
 		
-	}
+   }
 	
-	
+	// PROCESA LA TRAMA HTTP ENVIADA POR EL NAVEGADOR
+	// COMPRUEBA DE LA PRIMERA LINEA EL TIPO DE PETICION
+	// Y LA URL
 	public void procesarPeticion ()
 	{
 		String aux1 = "";
