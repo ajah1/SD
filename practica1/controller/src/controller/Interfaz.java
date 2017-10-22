@@ -7,11 +7,11 @@ import java.rmi.RemoteException;
 // EL OBJETO REMOTO
 public interface Interfaz extends Remote
 {
-	public void setid( int id )throws RemoteException;
-	public void setTemp( int temp )throws RemoteException;
-	public void setHumedad( int humedad )throws RemoteException;
-	public void setTipo( String tipo )throws RemoteException;
-	public void setFecha( String fecha)throws RemoteException;
+	public int getid()throws RemoteException;
+	public int getTemp()throws RemoteException;
+	public int getHumedad()throws RemoteException;
+	public String getTipo()throws RemoteException;
+	public String getFecha()throws RemoteException;
 	
 	public void crearSonda(String nombre)throws RemoteException;
 	public void leerFichero( String nombre ) throws Exception, RemoteException;

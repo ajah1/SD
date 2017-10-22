@@ -10,39 +10,34 @@ public class Registro{
 	@SuppressWarnings("deprecation")
 	public static void main (String args[]) throws RemoteException, MalformedURLException
 	{
-		String nombre = "";
 		BufferedReader br;
 		br = new BufferedReader(new InputStreamReader(System.in));
-		String resp = "";
+		
+		int humedad = 40; 
+		String fecha = "12/12/12";
 		
 		System.out.println("*** REGISTRO DE SONDAS ***");
-		try
+		try	
 		{
 			System.out.println("\n"+">creando sondas por defecto...");
 			for ( int i = 0; i < 2; ++i )
 			{
-				Sonda objetoRemoto = new Sonda();
-				nombre = "/sonda"+i;
-				Naming.rebind(nombre, objetoRemoto);
+				Sonda sonda = new Sonda(i,"humedad",humedad,0,fecha);
+				sonda.crearSonda("sonda"+i);
+				Naming.rebind("/sonda"+i, sonda);
 				
-				System.out.println("[rmi://localhost:1099/"+nombre+"]");
+				System.out.println("[rmi://localhost:1099/"+("sonda"+i)+"]");
 			}
-		
-			int j = 2;
-			System.out.print(">Añadir otra sonda? [no/yes]: ");
-			resp = br.readLine();
-			
-			while ( resp.equals("yes") )
-			{
-				Sonda objetoRemoto = new Sonda();
-				nombre = "/sonda"+j;
-				Naming.rebind(nombre, objetoRemoto);
-				System.out.println("[rmi://localhost:1099/"+nombre+"]");
-				j++;
-				
-				System.out.println("\n"+">Añadir otra sonda? [no/yes]: ");
-				resp = br.readLine();
-			}
+
+			System.out.print(">Sonda personalizada...: ");
+			System.out.print("[temperatura: ]");
+			int temperatura = Integer.parseInt( br.readLine() );
+
+			Sonda sonda = new Sonda(2,"temperatura",0,temperatura,fecha);
+			sonda.crearSonda("sonda2");
+			Naming.rebind("/sonda2", sonda);
+			System.out.println("[rmi://localhost:1099/"+"/sonda2"+"]");
+
 		}
 		catch ( Exception e)
 		{

@@ -90,27 +90,16 @@ public class Controller {
         {
         	 System.setSecurityManager(new RMISecurityManager());
         	 
-        	 String names [];
-        	 
         	 System.out.println("obtener nombres objetos remotos");
+        	 String names [];
         	 names = Naming.list(servidor);
         	 System.out.println("names: " + names[0]);
-        	 
         	 
         	 Interfaz sonda;
         	 System.out.println("enlazar con sonda registrada");
         	 sonda = (Interfaz) Naming.lookup("//localhost:1099/sonda0");
         	 
         	 System.out.println("inicializar la sonda");
-        	 sonda.setTipo("temperatura");
-        	 sonda.setTemp(99);
-        	 sonda.setid(0);
-        	 sonda.setHumedad(99);
-        	 sonda.setFecha("12/12/12/12");
-        	 
-        	 System.out.println("crear sonda");
-        	 sonda.crearSonda("sonda0");
-        	 System.out.println("creada");
         	 
         }
         catch( Exception e)

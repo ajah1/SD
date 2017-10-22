@@ -24,7 +24,6 @@ public class Sonda extends UnicastRemoteObject
 		super();
 	}
 	
-	// INICIALIZAR LA SONDA CON EL ID PASADO 
 	public Sonda( int id, 
 					String tipo, 
 					int humedad, 
@@ -41,8 +40,6 @@ public class Sonda extends UnicastRemoteObject
 		
 	}
 
-	// FUNCION PARA LEER EL FICHERO QUE HACE DE SONDA
-	// SI NO ESTÁ LANZAMOS EXCEPCIÓN
 	@Override
 	public void leerFichero(String nombre) throws Exception {
 		
@@ -69,26 +66,7 @@ public class Sonda extends UnicastRemoteObject
 				String aux[] = linea.split("=");
 				System.out.print(aux[0]);
 				System.out.println(aux[1]);
-				
-				if ( linea.contains("ID") )
-					setid( Integer.parseInt(aux[1]) );
-				
-				else if ( linea.contains("Tipo") )
-					setTipo( aux[1] );
-				
-				else if ( linea.contains("Fecha") )
-					setFecha( aux[1] );
-				
-				else if ( linea.contains("Temperatura") )
-					setTemp( Integer.parseInt(aux[1]) );
-
-				else if ( linea.contains("Humedad") )
-					setHumedad( Integer.parseInt(aux[1]) );
-				
-				linea = br.readLine();
-			
 			}
-			
 			br.close();
 			file.close();
 		}
@@ -123,69 +101,32 @@ public class Sonda extends UnicastRemoteObject
 			bw.close();
 		
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			System.out.println("ERROR: al crear sonda nueva (fichero)");
 			System.out.println(e.toString());
 		}
 		
 	}
-	
-	// SETTERS PARA MODIFICAR SOLO LOS VALORES
-	// DEL FICHERO QUE REPRESENTA LA SONDA
-	@Override
-	public void setid(int id) {
-		// TODO Auto-generated method stub
-		this._id = id;
-		//crearSonda("sonda"+_id);
-	}
 
 	@Override
-	public void setTemp(int temp) {
-		// TODO Auto-generated method stub
-		this._temperatura = temp;
-		//crearSonda("sonda"+_id);
+	public int getid() throws RemoteException {
+		return _id;
 	}
-
 	@Override
-	public void setHumedad(int humedad) {
-		// TODO Auto-generated method stub
-		this._humedad = humedad;
-		//crearSonda("sonda"+_id);
+	public int getTemp() throws RemoteException {
+		return _temperatura;
 	}
-
 	@Override
-	public void setTipo(String tipo) {
-		// TODO Auto-generated method stub
-		this._tipo = tipo;
-		//crearSonda("sonda"+_id);
+	public int getHumedad() throws RemoteException {
+		return _humedad;
 	}
-
 	@Override
-	public void setFecha(String fecha) {
-		// TODO Auto-generated method stub
-		this._fecha = fecha;
-		//crearSonda("sonda"+_id);
+	public String getTipo() throws RemoteException {
+		return _tipo;
 	}
-	/*
-	public static void main (String args[]) throws Exception
-	{
-		try {
-			Sonda sonda= new Sonda(2,"humedad", 99, 99, "99/99/99");
-			
-			sonda.crearSonda("sonda2");
-			System.out.println("sonda creada");
-			
-			sonda.leerFichero("sonda2");
-			
-			System.out.println("Sonda leida");
-
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+	@Override
+	public String getFecha() throws RemoteException {
+		return _fecha;
 	}
-	*/
 
 }
 
