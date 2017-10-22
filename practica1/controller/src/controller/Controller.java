@@ -7,9 +7,8 @@ import java.io.PrintWriter;
 import java.net.*;
 import java.rmi.Naming;
 import java.rmi.RMISecurityManager;
-import java.util.StringTokenizer;
 
-
+import controller.Sonda;
 // GENERA EL CONTENIDO DINÁMICO, 
 // LEE LOS VALORES DE LAS SONDAS
 public class Controller {
@@ -68,17 +67,20 @@ public class Controller {
     	String [] datos = this.url.split("/");
     	
     	for ( String d : datos)
-    		System.out.println(d);
+    		System.out.print(d);
     	
-    	System.out.println("preparando conexión rmi");
+    	
+    	System.out.println(" ");
+    	System.out.println("conectando con objeto remoto");
     	// rmi://localhost:1099
     	String host= "localhost";
     	int port = 1099;
     	String servidor = "rmi://" + host + ":" + port;
         System.out.println("Servidor:" + servidor);
         
-        String servidorConcreto = servidor.concat("/" + "sonda1");
+        String servidorConcreto = servidor.concat("/" + "sonda0");
         System.out.println("Objeto:" + servidorConcreto);
+        System.out.println(" ");
         
         try
         {
@@ -88,11 +90,23 @@ public class Controller {
         	 
         	 System.out.println("obtener nombres objetos remotos");
         	 names = Naming.list(servidor);
+        	 System.out.println("names: " + names[0]);
         	 
-        	 for ( String n : names)
-        	 {
-        		 System.out.println(n);
-        	 }
+        	 
+        	 Interfaz sonda;
+        	 System.out.println("enlazar con sonda registrada");
+        	 sonda = (Interfaz) Naming.lookup("//localhost:1099/sonda0");
+        	 
+        	 System.out.println("inicializar la sonda");
+        	 sonda.setTipo("temperatura");
+        	 sonda.setTemp(99);
+        	 sonda.setid(0);
+        	 sonda.setHumedad(99);
+        	 sonda.setFecha("12/12/12/12");
+        	 
+        	 System.out.println("crear sonda");
+        	 sonda.crearSonda("sonda0");
+        	 System.out.println("creada");
         	 
         }
         catch( Exception e)

@@ -106,7 +106,7 @@ public class Sonda extends UnicastRemoteObject
 	{
 		try 
 		{
-			File file = new File( nombre);
+			File file = new File(nombre);
 			
 			BufferedWriter bw = new BufferedWriter(new FileWriter(nombre));
 			
@@ -136,35 +136,35 @@ public class Sonda extends UnicastRemoteObject
 	public void setid(int id) {
 		// TODO Auto-generated method stub
 		this._id = id;
-		crearSonda("sonda"+_id);
+		//crearSonda("sonda"+_id);
 	}
 
 	@Override
 	public void setTemp(int temp) {
 		// TODO Auto-generated method stub
 		this._temperatura = temp;
-		crearSonda("sonda"+_id);
+		//crearSonda("sonda"+_id);
 	}
 
 	@Override
 	public void setHumedad(int humedad) {
 		// TODO Auto-generated method stub
 		this._humedad = humedad;
-		crearSonda("sonda"+_id);
+		//crearSonda("sonda"+_id);
 	}
 
 	@Override
 	public void setTipo(String tipo) {
 		// TODO Auto-generated method stub
 		this._tipo = tipo;
-		crearSonda("sonda"+_id);
+		//crearSonda("sonda"+_id);
 	}
 
 	@Override
 	public void setFecha(String fecha) {
 		// TODO Auto-generated method stub
 		this._fecha = fecha;
-		crearSonda("sonda"+_id);
+		//crearSonda("sonda"+_id);
 	}
 	/*
 	public static void main (String args[]) throws Exception
