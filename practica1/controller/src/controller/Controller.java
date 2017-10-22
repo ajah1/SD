@@ -1,8 +1,10 @@
 package controller;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.*;
 import java.rmi.Naming;
@@ -13,11 +15,13 @@ import controller.Sonda;
 // LEE LOS VALORES DE LAS SONDAS
 public class Controller {
 	
-	private String hosthttp;
-	private int portrmi;
-	private int porhttp;
-	private String url;
-	private String peticion;
+	// datos del controller
+	private String hosthttp = "";
+	private int porthttp = 0;
+	private int portcontroller = 0;
+	
+	// url obtenida en la peticion
+	private String url = "";
 	
 	// LEE LOS DATOS ESCRITOS EN EL SOCKET ENTRE SERVER
 	// Y CONTROLADOR
@@ -122,22 +126,21 @@ public class Controller {
     {
     	try 
     	{
-			ServerSocket ss = new ServerSocket(this.portrmi);
-			System.out.println("Abrir server rmi, escuchando");
-			
+    		System.out.println(">Abriendo controller...");
+			ServerSocket ss = new ServerSocket( this.portcontroller );
+						
 			for (;;)
 			{
-				
 				Socket sc = ss.accept();
-				System.out.println("Aceptado clientehttp");
+				System.out.println( "\n"+"==>Cliente aceptado" );
 				
 				this.url = this.leeSocket(sc, url);
 				
 				System.out.println("URL: "+ this.url);
 				
-				System.out.println("cerrando petición atendida :O");
-				
 				sc.close();
+				System.out.println( "==>Cliente leido");
+				
 				this.procesarPeticion();
 			
 			}
@@ -149,32 +152,43 @@ public class Controller {
 		}
     }
     
-    public static void main(String[] args) 
+    public static void main(String[] args) throws IOException 
     {
-    	
     	Controller c= new Controller();
+		String aux = "";
 		
 		c.hosthttp = "localhost";
-		c.porhttp = 8080;
-		c.portrmi = 8090;
+		c.porthttp = 8080;
+		c.portcontroller = 8090;
+		
+		BufferedReader br;
+		br = new BufferedReader(new InputStreamReader(System.in));
+		
+    	System.out.println("*** ASISTENTE CONTROLLER ***"+"\n");
+    	
+		System.out.print( ">Puerto del controller [pd 8090]: " );
+		aux = br.readLine();
+		if ( !aux.equals(""))
+			c.portcontroller = Integer.parseInt(aux);
+    	
+		System.out.print( ">Host minihttpserver [pd localhost]: " );
+		aux = br.readLine();
+		if ( !aux.equals(""))
+			c.hosthttp = aux;
+		
+		System.out.print( ">Puerto minihttpserver [pd 8080]: " );
+		aux = br.readLine();
+		if ( !aux.equals(""))
+			c.porthttp = Integer.parseInt(aux);
+		
+		System.out.println( "\n"+"Datos a usar en el controller..." );
+		System.out.println("portcontroller: " + c.portcontroller);
+		System.out.println("hosthttp: " + c.hosthttp);
+		System.out.println("porthttp: " + c.porthttp + "\n");
+
 		
 		c.abrirServer();
-    	
-    	if ( args.length < 3)
-    	{
-    		System.out.println("Error argumentos incorrectos");
-    		System.out.println("/Controller hostRMI portRMI portHTTP");
-    	}
-    	else 
-    	{
-    		Controller co = new Controller();
-    		
-    		c.hosthttp = args[0];
-    		c.porhttp = Integer.parseInt(args[1]);
-    		c.portrmi = Integer.parseInt(args[2]);
-    		
-    		c.abrirServer();
-    	}
+
     }
 }
 

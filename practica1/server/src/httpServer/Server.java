@@ -1,7 +1,12 @@
 package httpServer;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.*;
 import java.util.Scanner;
+
+import javax.swing.plaf.synth.SynthSpinnerUI;
 
 public class Server {
 
@@ -14,7 +19,7 @@ public class Server {
 		{
 			// SERVIDOR A LA ESPERA DE PETICIONES EN EL PUERTO _ps
 			ServerSocket ss = new ServerSocket( _ps );
-			System.out.println( "Escucho el puerto " + _ps );
+			System.out.println( ">Escucho el puerto " + _ps );
 	
 			for(;;)
 			{
@@ -23,18 +28,18 @@ public class Server {
 					_cc--;
 					// SE ACEPTA UNA PETICIÓN
 					Socket sc = ss.accept();
-					System.out.println( "Cliente(" + (_cc + 1) +  ") aceptado" );
+					System.out.println( "\n"+"==>Cliente(" + (_cc + 1) +  ") aceptado" );
 	
 					// NUEVO THREAD PARA CADA PETICIÓN ACEPTADA
 			        Thread t = new ServerHilo( sc, _pc, _hc );
 			        t.start();
 			        
-			        System.out.println( "Cliente(" + (_cc + 1) +  ") cerrado" + "\n");
+			        System.out.println( "==>Cliente(" + (_cc + 1) +  ") finaliza");
 			        
 			        _cc++;
 				}
 				else
-					System.out.println( "Cliente rechazado :O" );
+					System.out.println( "Cliente rechazado concurrencias al maximo" );
 			}
 		}
 		catch ( Exception e )
@@ -46,37 +51,51 @@ public class Server {
 	
 	// MUESTRA EL MENÚ CON LO DATOS NECESARIOS PARA 
 	// INICIAR EL SOCKET
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		Server sv= new Server();
 
-		// VALORES POR DEFECTO
+		// DATOS POR DEFECTO LAS CONEXIONES
 		int ps = 8080;
 		int pc = 8090;
-		int concurrencias = 5;
+		int concurrencias = 6;
 		
 		String hostController = "localhost";
-
-		Scanner sc = new Scanner( System.in );
+		String aux = "";
 		
+		BufferedReader br;
+		br = new BufferedReader(new InputStreamReader(System.in));
 		// PEDIR LOS DATOS
-		System.out.println( "*** Asistente minihttpserver ***" + "\n" );
+		System.out.println( "*** ASISTENTE MINIHTTPSERVER ***" + "\n" );
 		
-		System.out.print( "Puerto server http [pd 8080]: " );
-		ps = sc.nextInt();
+		System.out.print( ">Puerto server http [pd 8080]: " );
+		aux = br.readLine();
+		if ( !aux.equals(""))
+			ps = Integer.parseInt(aux);
 		
-		System.out.print( "Concurrencias [pd 5]: " );
-		concurrencias = sc.nextInt();
+		System.out.print( ">Concurrencias [pd 6]: " );
+		aux = br.readLine();
+		if ( !aux.equals(""))
+			concurrencias = Integer.parseInt(aux);
 		
-		System.out.print("Puerto controller [pd 8090]: ");
-		pc = sc.nextInt();
+		System.out.print(">Puerto controller [pd 8090]: ");
+		aux = br.readLine();
+		if ( !aux.equals(""))
+			pc = Integer.parseInt(aux);
 		
-		System.out.println("Host del controller [pd localhost] :");
-		hostController = sc.nextLine();
+		System.out.println(">Host del controller [pd localhost] :");
+		aux = br.readLine();
+		if ( !aux.equals(""))
+			hostController = aux;
 		
-		System.out.println( "\n" + "Abriendo server..." );
+		System.out.println( "Datos a usar en el server..." );
+		System.out.println("puertoServer: " + ps);
+		System.out.println("concurrencias: " + concurrencias);
+		System.out.println("puertoController: " + pc);
+		System.out.println("hostController: " + hostController);
+		
+		System.out.println( "\n" + ">Abriendo server..." );
 		sv.abrirServer( ps, concurrencias, pc, hostController );
-		
 		
 	}
 	

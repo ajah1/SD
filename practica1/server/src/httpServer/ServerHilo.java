@@ -21,7 +21,7 @@ public class ServerHilo extends Thread{
 		socketCliente = _sc;
 		puertoController = _pc;
 		hostController = _hc;
-		this.run();
+		this.procesarPeticion();
 	}
 	
 	// PARA LEER EL SOCKET, USADO PARA LEER LA TRAMA
@@ -59,6 +59,8 @@ public class ServerHilo extends Thread{
 	// EN UNA PETICIÓN HTTP, SIENDO ESCRITA EN EL SOCKET
 	public void enviarEstatico( String [] cadena )
 	{
+		System.out.println("");
+		System.out.println("[Procesando petición estatica...]");
 		try 
 		{
 			PrintWriter salida;
@@ -72,8 +74,8 @@ public class ServerHilo extends Thread{
 			// ENVIA LA PÁGINA PRINCIPAL DEL INVERNADERO
 			if ( cadena.length == 0 || cadena[1].equals("index.html") )
 			{
-				//System.out.println("preparando http para index..");
-					
+
+				System.out.println("[preparando index.html]");
 				archivo = archivo.concat("index.html");
 				
 				br = new BufferedReader( new FileReader( archivo ) );
@@ -94,13 +96,13 @@ public class ServerHilo extends Thread{
 				}
 				
 				salida.flush();
-				//salida.close();
-				
-				//System.out.println("http enviado");
+				System.out.println("[index enviado]");
 			}
 			// PÁGINA DE ERROR EN CASO DE URL INCORRECTA
 			else
 			{
+				System.out.println("[erro en la url]");
+				System.out.println("[preparando error.html]");
 				archivo = archivo.concat("error.html");
 				
 				br = new BufferedReader( new FileReader( archivo ));
@@ -119,9 +121,8 @@ public class ServerHilo extends Thread{
 					salida.println( datos );
 					datos = br.readLine();
 				}
-				
+				System.out.println("[pagina error enviada]");
 				salida.flush();
-				//salida.close();
 			}
 			
 		} 
@@ -155,17 +156,16 @@ public class ServerHilo extends Thread{
    // DATOS PEDIDOS POR LA URL
    public void enviarDinamico( String [] cadena )
    {
-		System.out.println("cosas dinámicas :O");
-		System.out.println("Contectando al socket del controller...");
+		System.out.println("");
+		System.out.println("[Procesando petición dińamica...]");
 		try
 		{
 			// conectar con el socket del controller
 			this.socketController = new Socket(this.hostController, this.puertoController);
 			
-			String datos = "invernadero=1@sonda=1";
 			this.escribeSocket(socketController, this.comando);
 			
-			System.out.println("Peticion escrita en socket del controller");
+			System.out.println("[Peticion enviada al controller]");
 			this.socketController.close();
 			
 		}
@@ -193,38 +193,29 @@ public class ServerHilo extends Thread{
 		{
 			StringTokenizer s = new StringTokenizer( buffer );
 
-			// guardamos tipo de comando
+			// guardamos tipo de peticion
 			aux1 = s.nextToken().toString();
-			//System.out.println("COMANDO: " + aux1 );
 			
 			if ( aux1.equals("GET") )
 			{
 				aux1 = s.nextToken().toString();
 				this.comando = aux1;
-				//System.out.println("URL: " + aux1);
 				
 				String [] cadena = aux1.split("/");
 
 				if ( cadena.length == 0 || !cadena[1].equals("controladorSD") )
+				{
+					System.out.print("@petición estatica detectada");
 					enviarEstatico( cadena );
-
+				}
 				else
 				{
-					System.out.println("ENTRAR EN DINAMICO");
+					System.out.println("@petición dinamica");
 					enviarDinamico( cadena );
 				}
 			}
 		}
 	}
-	
-	/*
-	 * Iniciar petición :O
-	 */
-	public void run()
-	{
-		this.procesarPeticion();
-	}
-	
 }
 
 
