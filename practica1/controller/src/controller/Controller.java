@@ -8,9 +8,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.*;
 import java.rmi.Naming;
-import java.rmi.RMISecurityManager;
-
-import controller.Sonda;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 // GENERA EL CONTENIDO DINÁMICO, 
 // LEE LOS VALORES DE LAS SONDAS
 public class Controller {
@@ -22,6 +21,10 @@ public class Controller {
 	
 	// url obtenida en la peticion
 	private String url = "";
+	
+	// datos del host que contiene rmi
+	private String hostrmi = "";
+	private int portrmi = 0;
 	
 	// LEE LOS DATOS ESCRITOS EN EL SOCKET ENTRE SERVER
 	// Y CONTROLADOR
@@ -62,18 +65,87 @@ public class Controller {
         return;
     }
 	
+    // DEVUELVE INDEX AL SERVER, LISTA LAS SONDAS REGITRADAS
+    // Y LOS DATOS DE CADA UNA
+    public String index()
+    {
+    	String http = "";
+    	String pagina = "";
+    	String cabeza = "";
+    	
+    	// http
+    	
+    	http=  "HTTP/1.1 200 OK \n"
+    			+ "Content-Type: text/html; charset=utf-8 \n"
+    			+ "Server: MyHTTPServer \n"
+    			+ "\n";
+	
+    	// primera parte del html
+    	cabeza =  "<!DOCTYPE html>\n<html> \n"
+                + "    <head>\n"
+                + "        <meta charset=\"utf-8\">\n"
+                + " 		<title>ESTACIÓN </title>\n"
+                + "        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n"
+                + "    </head>\n"
+                + "    <body>\n"
+                + "        <h1>LISTADO DE SONDAS Y SUS LECTURAS</h1>\n"
+                + "        <a href=\"/index.html\">Inicio</a>\n";
+
+    	try {
+			// obtener objetos remotos registrados 
+    		String servidor = "rmi://" + this.hostrmi + ":" + this.portrmi;
+    		
+			String names [] = Naming.list(servidor);
+			
+			Interfaz sonda;
+			String datos = "";
+			String datosObjetos = "";
+			
+			// obtener datos objeto
+			for ( String n : names )
+			{
+				sonda = (Interfaz) Naming.lookup(n);
+				
+				datos = 
+							"<div> \n"
+							+ "<p>SONDA "+ sonda.getid() + "</p> \n "
+							+ "<p>Tipo=" + sonda.getTipo() + "</p> \n"
+							+ "<p>Fecha=" + sonda.getFecha() + "</p> \n"
+							+ "<p>Humedad=" + sonda.getHumedad() + "</p> \n"
+							+ "<p>Temperatura=" + sonda.getTemp() + "</p> \n"
+							+ "</div> \n";
+				
+				datosObjetos = datosObjetos + datos;
+				
+			}
+				pagina =   http + cabeza + datosObjetos + "</body> \n </html> \n";
+    	}
+    	catch( Exception e)
+    	{
+    		System.out.println(e.toString());
+    	}
+    	
+    	return pagina;
+    }
+    
     // LLAMA A LOS OBJETOS REMOTOS (SONDAS)
     // PARA OBTENER LOS DATOS PEDIDOS
 	@SuppressWarnings("deprecation")
-	public void procesarPeticion()
+	public String procesarPeticion() throws MalformedURLException, NotBoundException, RemoteException
     {
     
     	String [] datos = this.url.split("/");
-    	
+    	/*
     	for ( String d : datos)
     		System.out.print(d);
+    	*/
     	
+    	// controladorSD/
+    	// controladorSD/index
+    	//if ( datos.length == 1 || datos[1].equals("index"))
+    		return this.index();
     	
+    	/*
     	System.out.println(" ");
     	System.out.println("conectando con objeto remoto");
     	// rmi://localhost:1099
@@ -99,19 +171,20 @@ public class Controller {
         	 System.out.println("enlazar con sonda registrada");
         	 sonda = (Interfaz) Naming.lookup("//localhost:1099/sonda0");
         	 
-        	 System.out.println("inicializar la sonda");
+        	 System.out.println("ID"+sonda.getid());
+        	 
         	 
         }
         catch( Exception e)
         {
         	System.out.println("ERROR. procesar peticion en controller");
         	System.out.println(e.toString());
-        }
+        }*/
     }
     
     // ABRE UN SOCKET A LA ESCUCHA DE PETICIONES
     // DEL SERVER,
-    public void abrirServer()
+    public void abrirServer() throws NotBoundException
     {
     	try 
     	{
@@ -127,10 +200,13 @@ public class Controller {
 				
 				System.out.println("URL: "+ this.url);
 				
-				sc.close();
-				System.out.println( "==>Cliente leido");
+				String pet = this.procesarPeticion();
+				System.out.println(pet);
 				
-				this.procesarPeticion();
+				this.escribeSocket(sc, pet);
+				System.out.println( "==>Cliente respondido");
+				
+				//sc.close();
 			
 			}
 		} 
@@ -141,7 +217,7 @@ public class Controller {
 		}
     }
     
-    public static void main(String[] args) throws IOException 
+    public static void main(String[] args) throws IOException, NotBoundException 
     {
     	Controller c= new Controller();
 		String aux = "";
@@ -149,6 +225,8 @@ public class Controller {
 		c.hosthttp = "localhost";
 		c.porthttp = 8080;
 		c.portcontroller = 8090;
+		c.hostrmi="localhost";
+		c.portrmi=1099;
 		
 		BufferedReader br;
 		br = new BufferedReader(new InputStreamReader(System.in));
@@ -170,10 +248,22 @@ public class Controller {
 		if ( !aux.equals(""))
 			c.porthttp = Integer.parseInt(aux);
 		
+		System.out.print( ">Host rmi [pd localhost]: " );
+		aux = br.readLine();
+		if ( !aux.equals(""))
+			c.hostrmi = aux;
+		
+		System.out.print( ">Port rmi [pd 1099]: " );
+		aux = br.readLine();
+		if ( !aux.equals(""))
+			c.portrmi = Integer.parseInt(aux);
+		
 		System.out.println( "\n"+"Datos a usar en el controller..." );
 		System.out.println("portcontroller: " + c.portcontroller);
 		System.out.println("hosthttp: " + c.hosthttp);
-		System.out.println("porthttp: " + c.porthttp + "\n");
+		System.out.println("porthttp: " + c.porthttp);
+		System.out.println("hostrmi: " + c.hostrmi);
+		System.out.println("porRmi: " + c.portrmi + "\n");
 
 		
 		c.abrirServer();

@@ -1,9 +1,11 @@
 package controller;
 
 import java.io.*;
-
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.rmi.*;
 import java.rmi.server.*;
+import java.util.List;
 
 // IMPLEMENTACIÓN DE LA INTERFAZ
 // ESTE OBJETO REPRESENTA CADA UNA DE LAS
@@ -40,41 +42,36 @@ public class Sonda extends UnicastRemoteObject
 		
 	}
 
+	// DEVUELVE EL DATO DE LA SONDA A LEER
 	@Override
-	public void leerFichero(String nombre) throws Exception {
+	public String leerFichero(String nombre, String dato) throws Exception {
+		
+		String out = "";
 		
 		try
 		{
-			System.out.println("ENTRAR LEER");
-			
-			File archivo = new File( nombre );
-			System.out.println("ABIERTO");
-			
-			FileReader file = new FileReader( archivo );
-			System.out.println("LEIDO");
-			
-			BufferedReader br = new BufferedReader( file );
-			System.out.println("GUARDADO");
-			
-			
-			String linea = br.readLine();
-			// MIENTRAS QUEDEN LINEAS POR LEER...
-			while ( linea != null )
+			List<String> lines = Files.readAllLines(Paths.get(nombre));
+			System.out.println("fichero leido...");
+
+			for ( String line : lines )
 			{
-				// OBTENER LOS VALORES DE LA SONDA
-				// EN FUNCIÓN DEL TIPO DE SONDA
-				String aux[] = linea.split("=");
-				System.out.print(aux[0]);
-				System.out.println(aux[1]);
+				String aux[] = line.split("=");
+				if ( aux[0].equals(dato) )
+				{
+					out = aux[1];
+					break;
+				}
 			}
-			br.close();
-			file.close();
+			if ( out == "")
+				return "0";
 		}
 		catch( Exception e)
 		{
 			System.out.println("ERROR: al leer fichero sonda");
 			System.out.println(e.toString());
 		}
+		
+		return out;
 	}
 
 	// FUNCION PARA AÑADIR UNA NUEVA SONDA (FICHERO)
@@ -108,24 +105,58 @@ public class Sonda extends UnicastRemoteObject
 	}
 
 	@Override
-	public int getid() throws RemoteException {
-		return _id;
+	public int getid() throws RemoteException{
+			
+		int out = 0;
+		try {
+			out = Integer.parseInt(this.leerFichero("sonda"+_id, "ID"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return out;
 	}
 	@Override
 	public int getTemp() throws RemoteException {
-		return _temperatura;
+		int out = 0;
+		try {
+			out = Integer.parseInt(this.leerFichero("sonda"+_id, "Temperatura"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return out;
 	}
 	@Override
 	public int getHumedad() throws RemoteException {
-		return _humedad;
+		int out = 0;
+		try {
+			out = Integer.parseInt(this.leerFichero("sonda"+_id, "Humedad"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return out;
 	}
 	@Override
 	public String getTipo() throws RemoteException {
-		return _tipo;
+		String out = "";
+		try {
+			out = this.leerFichero("sonda"+_id, "Tipo");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return out;
 	}
 	@Override
 	public String getFecha() throws RemoteException {
-		return _fecha;
+		String out = "";
+		try {
+			out = this.leerFichero("sonda"+_id, "Fecha");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return out;
 	}
 
 }

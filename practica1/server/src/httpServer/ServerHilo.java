@@ -16,7 +16,7 @@ public class ServerHilo extends Thread{
 	
 	// INICIALIZA LOS ATRIBUTOS DEL HILO E
 	// INICIA A PROCESAR LA TRAMA HTTP DESDE EL MÉTODO RUN()
-	public ServerHilo ( Socket _sc, int _pc, String _hc )
+	public ServerHilo ( Socket _sc, int _pc, String _hc ) throws IOException
 	{	
 		socketCliente = _sc;
 		puertoController = _pc;
@@ -53,6 +53,21 @@ public class ServerHilo extends Thread{
 		return "";
 	}
 	
+    // ESCRIBE EN EL SOCKET ENTRE SERVIDOR-CLIENTE
+	// LOS DATOS PASADOS POR PARÁMETRO
+	public void escribeSocket(Socket sk, String datos) 
+	{
+	   try 
+	   {
+	       OutputStream aux = sk.getOutputStream();
+	       DataOutputStream flujo = new DataOutputStream(aux);
+	       flujo.writeUTF(datos);
+	   } 
+	   catch (Exception e) 
+	   {
+	       System.out.println("No se ha podido conectar con el controlador: " + e.toString());
+	   }
+	}
 
 	// GUARDA EN UN BUFFER EL ARCHIVO EL CONTENIDO
 	// ESTÁTICO CORRESPONDIENTE Y SE PREPARA PARA ESCRIBIRLO
@@ -133,41 +148,38 @@ public class ServerHilo extends Thread{
 		}
 			
 	}
-	
-    // ESCRIBE EN EL SOCKET ENTRE SERVIDOR-CLIENTE
-	// LOS DATOS PASADOS POR PARÁMETRO
-   public void escribeSocket(Socket sk, String datos) 
-   {
-       try 
-       {
-           OutputStream aux = sk.getOutputStream();
-           DataOutputStream flujo = new DataOutputStream(aux);
-           flujo.writeUTF(datos);
-       } 
-       catch (Exception e) 
-       {
-           System.out.println("No se ha podido conectar con el controlador: " + e.toString());
-       }
-   }
+
 	
    // CUANDO EN LA URL SE PIDA VALORES DE LAS SONDAS
    // DESDE ESTA FUNCIÓN LLAMAREMOS AL CONTROLADOR
    // PARA QUE NOS DEVUELVA LA PÁGINA EN FUNCIÓN DE LOS
    // DATOS PEDIDOS POR LA URL
-   public void enviarDinamico( String [] cadena )
+   public void enviarDinamico( String [] cadena ) throws IOException
    {
 		System.out.println("");
 		System.out.println("[Procesando petición dińamica...]");
+		String pagina = "";
+		
+		PrintWriter salida;
+		salida = new PrintWriter( socketCliente.getOutputStream() );
+		BufferedReader br;
 		try
 		{
 			// conectar con el socket del controller
 			this.socketController = new Socket(this.hostController, this.puertoController);
 			
+			System.out.println("[Enviando peticion al controller]");
 			this.escribeSocket(socketController, this.comando);
 			
-			System.out.println("[Peticion enviada al controller]");
-			this.socketController.close();
+			System.out.println("[Leyendo pagina enviada por el controller]");
+			String respuesta = "";
 			
+			while ( respuesta.isEmpty() )
+				respuesta = this.leerSocket(socketController, respuesta);
+			
+			this.escribeSocket(socketCliente, respuesta);
+			
+			this.socketController.close();
 		}
 		catch ( Exception e)
 		{
@@ -175,14 +187,13 @@ public class ServerHilo extends Thread{
 			System.out.println(e.toString());
 		}
 		
-		System.out.println("Conectado");
 		
    }
 	
 	// PROCESA LA TRAMA HTTP ENVIADA POR EL NAVEGADOR
 	// COMPRUEBA DE LA PRIMERA LINEA EL TIPO DE PETICION
 	// Y LA URL
-	public void procesarPeticion ()
+	public void procesarPeticion () throws IOException
 	{
 		String aux1 = "";
 		String buffer = "";

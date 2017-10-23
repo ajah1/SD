@@ -14,5 +14,5 @@ public interface Interfaz extends Remote
 	public String getFecha()throws RemoteException;
 	
 	public void crearSonda(String nombre)throws RemoteException;
-	public void leerFichero( String nombre ) throws Exception, RemoteException;
+	public String leerFichero( String nombre, String dato ) throws Exception, RemoteException;
 }
