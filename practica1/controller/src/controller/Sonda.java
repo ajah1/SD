@@ -52,7 +52,7 @@ public class Sonda extends UnicastRemoteObject
 		{
 			List<String> lines = Files.readAllLines(Paths.get(nombre));
 			System.out.println("fichero leido...");
-
+			
 			for ( String line : lines )
 			{
 				String aux[] = line.split("=");
