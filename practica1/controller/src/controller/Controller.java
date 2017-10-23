@@ -128,13 +128,36 @@ public class Controller {
     	return pagina;
     }
     
-    // LLAMA A LOS OBJETOS REMOTOS (SONDAS)
-    // PARA OBTENER LOS DATOS PEDIDOS
+    // GENERA PAGINA CON TODOS LOS DATOS DE LA SONDA PASADA
+    // SI ESTA NO EXISTE, SE ENVIA PAGINA DE ERROR
+    public String sondaConcreta ( String _sonda )
+    {
+    	return "";
+    }
+
+    // DIVIDE LA URL OBTENIDO Y LLAMA A LAS FUNCIONES CORRESPONDIENTES
+    // EN FUNCIÓN DE LOS DATOS PEDIDOS EN LA URL
 	@SuppressWarnings("deprecation")
 	public String procesarPeticion() throws MalformedURLException, NotBoundException, RemoteException
     {
     
     	String [] datos = this.url.split("/");
+    	System.out.println("LONG: "+datos.length);
+    	System.out.println(datos[0]);
+    	
+    	// GENERAR CONTROLADORSD/INDEX
+    	if ( datos.length == 1 || datos[1].equals("index") )
+    		return this.index();
+    	
+    	// SONDA EN CONCRETO
+    	else if ( !datos[1].contains("?") )
+    		return this.sondaConcreta(datos[1]);
+    				
+    	// VALOR DE SONDA
+    	
+    	// NO TENEMOS EL RECURSO
+    	
+    	return "";
     	/*
     	for ( String d : datos)
     		System.out.print(d);
@@ -143,7 +166,7 @@ public class Controller {
     	// controladorSD/
     	// controladorSD/index
     	//if ( datos.length == 1 || datos[1].equals("index"))
-    		return this.index();
+    
     	
     	/*
     	System.out.println(" ");
@@ -196,7 +219,8 @@ public class Controller {
 				Socket sc = ss.accept();
 				System.out.println( "\n"+"==>Cliente aceptado" );
 				
-				this.url = this.leeSocket(sc, url);
+				String d [] = this.leeSocket(sc, url).split("/");
+				this.url = d[1];
 				
 				System.out.println("URL: "+ this.url);
 				
