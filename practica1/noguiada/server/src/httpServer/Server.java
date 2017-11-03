@@ -83,7 +83,7 @@ public class Server {
 		if ( !aux.equals(""))
 			pc = Integer.parseInt(aux);
 		
-		System.out.println(">Host del controller [pd localhost] :");
+		System.out.print(">Host del controller [pd localhost]: ");
 		aux = br.readLine();
 		if ( !aux.equals(""))
 			hostController = aux;
