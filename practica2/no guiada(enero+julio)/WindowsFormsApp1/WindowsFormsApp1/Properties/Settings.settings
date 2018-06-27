@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SDJulio.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SDJulio_Actuador_Actuador" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://192.168.207.3:8080/EjemploMaster/services/Actuador.ActuadorHttpSoap11Endpoint/</Value>
+    </Setting>
+    <Setting Name="SDJulio_WebReference_Sensor" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://192.168.207.3:8080/EjemploMaster/services/Sensor.SensorHttpSoap11Endpoint/</Value>
+    </Setting>
+    <Setting Name="SDJulio_UDDI_UDDIInquiryService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://192.168.207.3:8080/juddiv3/services/inquiry</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

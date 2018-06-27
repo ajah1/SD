@@ -1,0 +1,6 @@
+temperatura:0
+humedad:5
+cliente:false
+actuador:false
+rangoA:0
+rangoB:0

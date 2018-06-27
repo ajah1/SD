@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns="http://master" xmlns:ns1="http://org.apache.axis2/xsd" targetNamespace="http://master" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation>
+		Please Type your service description here
+	</wsdl:documentation>
+  <wsdl:types>
+    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://master">
+      <xs:element name="isOkey">
+        <xs:complexType>
+          <xs:sequence />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="isOkeyResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="LeerDato">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="dato" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="p_indice" type="xs:int" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="LeerDatoResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="escribirFichero">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="p_dato" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="p_valor" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="p_indice" type="xs:int" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="LeerDatoRequest">
+    <wsdl:part name="parameters" element="ns:LeerDato" />
+  </wsdl:message>
+  <wsdl:message name="LeerDatoResponse">
+    <wsdl:part name="parameters" element="ns:LeerDatoResponse" />
+  </wsdl:message>
+  <wsdl:message name="escribirFicheroRequest">
+    <wsdl:part name="parameters" element="ns:escribirFichero" />
+  </wsdl:message>
+  <wsdl:message name="isOkeyRequest">
+    <wsdl:part name="parameters" element="ns:isOkey" />
+  </wsdl:message>
+  <wsdl:message name="isOkeyResponse">
+    <wsdl:part name="parameters" element="ns:isOkeyResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ActuadorPortType">
+    <wsdl:operation name="LeerDato">
+      <wsdl:input wsaw:Action="urn:LeerDato" message="ns:LeerDatoRequest" />
+      <wsdl:output wsaw:Action="urn:LeerDatoResponse" message="ns:LeerDatoResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="escribirFichero">
+      <wsdl:input wsaw:Action="urn:escribirFichero" message="ns:escribirFicheroRequest" />
+    </wsdl:operation>
+    <wsdl:operation name="isOkey">
+      <wsdl:input wsaw:Action="urn:isOkey" message="ns:isOkeyRequest" />
+      <wsdl:output wsaw:Action="urn:isOkeyResponse" message="ns:isOkeyResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ActuadorSoap11Binding" type="ns:ActuadorPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="LeerDato">
+      <soap:operation soapAction="urn:LeerDato" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="escribirFichero">
+      <soap:operation soapAction="urn:escribirFichero" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="isOkey">
+      <soap:operation soapAction="urn:isOkey" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ActuadorSoap12Binding" type="ns:ActuadorPortType">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="LeerDato">
+      <soap12:operation soapAction="urn:LeerDato" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="escribirFichero">
+      <soap12:operation soapAction="urn:escribirFichero" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="isOkey">
+      <soap12:operation soapAction="urn:isOkey" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ActuadorHttpBinding" type="ns:ActuadorPortType">
+    <http:binding verb="POST" />
+    <wsdl:operation name="LeerDato">
+      <http:operation location="LeerDato" />
+      <wsdl:input>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="escribirFichero">
+      <http:operation location="escribirFichero" />
+      <wsdl:input>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="isOkey">
+      <http:operation location="isOkey" />
+      <wsdl:input>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Actuador">
+    <wsdl:port name="ActuadorHttpSoap11Endpoint" binding="ns:ActuadorSoap11Binding">
+      <soap:address location="http://192.168.207.3:8080/EjemploMaster/services/Actuador.ActuadorHttpSoap11Endpoint/" />
+    </wsdl:port>
+    <wsdl:port name="ActuadorHttpSoap12Endpoint" binding="ns:ActuadorSoap12Binding">
+      <soap12:address location="http://192.168.207.3:8080/EjemploMaster/services/Actuador.ActuadorHttpSoap12Endpoint/" />
+    </wsdl:port>
+    <wsdl:port name="ActuadorHttpEndpoint" binding="ns:ActuadorHttpBinding">
+      <http:address location="http://192.168.207.3:8080/EjemploMaster/services/Actuador.ActuadorHttpEndpoint/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,3 @@
+incremento:1
+suscrito:false
+estado:parado
